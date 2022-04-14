@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/main.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/login.js"></script>
+    <script src="js/jqueries.js"></script>
+    <script src="js/createaccount.js"></script>
+    <script src="js/retrieveEvents.js"></script>
+    <script src="js/router.js"></script>
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Events</title>
+
+    <script>
+    $(function(){
+        $("#header").load("header.html");
+        $("#footer").load("footer.html");
+    });
+    </script>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <div id="header"></div>
+
+    <div class="container" ng-app="myApp" ng-controller="customersCtrl" id="rsos-content">
+
+        <div class="left-column">
+            <h3>Search Events</h3>
+            <div class="input-group">
+                <input type="text" class="form-control" ng-model="searchText" placeholder="Find Events..">
+            </div><!-- /input-group -->
+            <hr>
+            <h3>Find By Category </h3>
+            <ul>
+                <li><a href="#">Academic/ Pre-Professional</a></li>
+                <li><a href="#">Performing Arts</a></li>
+                <li><a href="#">Religious</a></li>
+                <li><a href="#">Sports & Recreational</a></li>
+                <li><a href="#">Academic/ Pre-Professional</a></li>
+                <li><a href="#">Performing Arts</a></li>
+                <li><a href="#">Religious</a></li>
+                <li><a href="#">Sports & Recreational</a></li>
+                <li><a href="#">Academic/ Pre-Professional</a></li>
+                <li><a href="#">Performing Arts</a></li>
+                <li><a href="#">Religious</a></li>
+                <li><a href="#">Sports & Recreational</a></li>
+                <li><a href="#">Academic/ Pre-Professional</a></li>
+                <li><a href="#">Performing Arts</a></li>
+                <li><a href="#">Religious</a></li>
+                <li><a href="#">Sports & Recreational</a></li>
+            </ul>
+        </div>
+
+        <div class="right-column" style="width:75%;">
+            <h2>All Current Events</h2>
+            <hr>
+            <div class="events">
+                <div class="event" ng-repeat="event in events | limitTo:25 | filter:searchText">
+                    <a href="#/event/{{event.Event_id}}">
+                        <div class="row">
+                            <div class="col-xs-12 event-info">
+                                <h3> {{event.Name}} </h3>
+                                <p> {{event.Description}} </p>
+                            </div>
+                        </div>
+                    </a>
+                    <h4 class="time">{{ event.Start_date | date : "EEE, M/d @ h:mm a" }}</h4>
+                    <hr>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div id="footer"></div>
+
+</body>
+</html>
+
+<script>
+$(document).ready(function() {
+    $("#rsos-content").ready(function() {
+        if (!checkCookie("loggedIn")) {
+            $("#rsos-content").html("<br><br><br><br><br><center><b>You must first sign in to access this page.</b></center><br><br><br><br><br>");
+        }
+    })
+});
+// User name to sign-in text
+$(".signinbtn").click(function(){
+    $("#uname").text(first.value)
+})
+
+</script>

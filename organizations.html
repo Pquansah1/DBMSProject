@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/main.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="js/script.js"></script>
+	<script src ="js/login.js"></script>
+	<script src = "js/jqueries.js"></script>
+	<script src ="js/restrictAccess.js"></script>
+	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+	<title>Organizations</title>
+
+	<script>
+	$(function(){
+		$("#header").load("header.html");
+		$("#footer").load("footer.html");
+	});
+	</script>
+</head>
+<body>
+
+	<!-- HEADER -->
+	<div id="header"></div>
+
+	<div class="container" ng-app="myApp" ng-controller="customersCtrl" id="rsos-content">
+
+		<div class="left-column">
+			<h3>Search Organizations</h3>
+			<div class="input-group">
+				<input type="text" class="form-control" ng-model="searchText" placeholder="Find Organizations..">
+
+			</div><!-- /input-group -->
+			<hr>
+			<h3>Find By Category </h3>
+			<ul>
+				<li><a href="#">Academic/ Pre-Professional</a></li>
+				<li><a href="#">Performing Arts</a></li>
+				<li><a href="#">Religious</a></li>
+				<li><a href="#">Sports & Recreational</a></li>
+			</ul>
+		</div>
+
+		<div class="right-column" style="width:75%;">
+			<h2>All Current Organizations</h2>
+			<hr>
+			<div class="rsos">
+				<div class="rso"  ng-click ="joinThisRSO(rso.RSO_id)" ng-repeat="rso in rsos | limitTo:25 | filter:searchText">
+					<div class="row">
+						<div class="col-xs-2" id="rsoLogo">
+							<img src='{{rso.Logo}}' class="img-circle"/>
+						</div>
+						<div class="col-xs-10">
+							<h3>{{rso.Name}}</h3>
+							<p> {{rso.Description}} </p>
+							<p ng-show ="showMe">{{rso.Description}} </p>
+						</div>
+					</div>
+					<hr>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- FOOTER -->
+	<div id="footer"></div>
+
+</body>
+</html>
+
+<script>
+$(document).ready(function() {
+	$("#rsos-content").ready(function() {
+		if (!checkCookie("loggedIn")) {
+	    $("#rsos-content").html("<br><br><br><br><br><center><b>You must first sign in to access this page.</b></center><br><br><br><br><br>");
+	  }
+	})
+ });
+
+//User name to sign-in text
+$(".signinbtn").click(function(){
+	$("#uname").text(first.value)
+})
+
+$(".h3").click(function(){
+	alert("You clicked an event.")
+})
+
+var app = angular.module('myApp', []);
+app.controller('customersCtrl', function($scope, $http) {
+	$scope.showMe = false;
+  $scope.myFunc = function() {
+      $scope.showMe = !$scope.showMe;
+  }
+
+	$scope.tempFunction = function(name) {
+		alert(name);
+	}
+	$scope.joinThisRSO = function(rsoid) {
+	  joinRSO(rsoid);
+	}
+
+	$
+
+	var config = {
+	    params: {
+	        u_id: getCookie("u_id")
+	    }
+	}
+	$http.get("http://teamflightclubproject.com/php/viewAllRSOs.php",config)
+	.then(function (response) {
+		console.log("Connected");
+		$scope.rsos = response.data;
+	});
+});
+</script>

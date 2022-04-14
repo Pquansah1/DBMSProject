@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/main.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/login.js"></script>
+    <script src = "js/jqueries.js"></script>
+    <script src="js/createaccount.js"></script>
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script src="https://code.angularjs.org/1.4.8/angular-route.min.js"></script>
+
+    <title>Events</title>
+
+    <script>
+    $(function(){
+        $("#header").load("header.html");
+        $("#footer").load("footer.html");
+    });
+    </script>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <div id="header"></div>
+
+    <div ng-app="myApp" ng-view>
+
+    </div>
+
+    <!-- FOOTER -->
+    <div id="footer"></div>
+
+</body>
+</html>
+
+<script>
+
+function geolocate() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+          var geolocation = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          };
+          var circle = new google.maps.Circle({
+            center: geolocation,
+            radius: position.coords.accuracy
+          });
+          autocomplete.setBounds(circle.getBounds());
+        });
+      }
+    }
+
+$(document).ready(function() {
+	$("#events-content").ready(function() {
+		if (!checkCookie("loggedIn")) {
+	    $("#events-content").html("<br><br><br><br><br><center><b>You must first sign in to access this page.</b></center><br><br><br><br><br>");
+	  }
+	})
+ });
+// User name to sign-in text
+$(".signinbtn").click(function(){
+    $("#uname").text(first.value)
+})
+
+var myApp = angular.module('myApp',['ngRoute']);
+
+myApp.config(function ($routeProvider) {
+
+  $routeProvider
+
+  .when('/', {
+    templateUrl:'eventsFolder/eventsFrame.html',
+    controller:'mainController'
+  })
+
+  .when('/universityOfCentralFlorida', {
+    templateUrl:'eventsFolder/universityOfCentralFlorida.html',
+    controller:'ucfController'
+  })
+  .when('/universityOfFlorida', {
+    templateUrl:'eventsFolder/universityOfFlorida.html',
+    controller:'ufController'
+  })
+  .when('/universityOfNorthFlorida', {
+    templateUrl:'eventsFolder/universityOfNorthFlorida.html',
+    controller:'unfController'
+  })
+  .when('/universityOfSouthFlorida', {
+    templateUrl:'eventsFolder/universityOfSouthFlorida.html',
+    controller:'usfController'
+  })
+  .when('/myRSOs', {
+    templateUrl:'eventsFolder/myRSOs.html',
+    controller:'rsosController'
+  })
+  .when('/event/:event_id', {
+   templateUrl: 'eventsFolder/singleEvent.html',
+   controller: 'eventController',
+})
+  //
+  // .when('/createRSO', {
+  //   templateUrl:'controlPanel/createRSO.html',
+  //   controller:'thirdController'
+  // })
+
+});
+
+myApp.controller('mainController',['$scope','$http',function($scope, $http) {
+  $http.get("http://teamflightclubproject.com/php/viewEveryEvent.php")
+  .then(function (response) {
+      console.log("Connected");
+      var responseData = response.data;
+
+      responseData.map(function(index){
+          date = new Date(index.Start_date);
+          index.Start_date = date;
+      })
+
+      $scope.events = responseData;
+  });
+
+}]);
+
+myApp.controller('ucfController',['$scope','$http',function($scope, $http) {
+  var config = {
+      params: {
+          school_id: "1",
+          u_id: getCookie("u_id"),
+          user_id:getCookie("user_id")
+      }
+  }
+
+  $http.get("http://teamflightclubproject.com/php/viewEventsByUniv.php",config)
+  .then(function (response) {
+      console.log("Connected");
+      var responseData = response.data;
+
+      responseData.map(function(index){
+          date = new Date(index.Start_date);
+          index.Start_date = date;
+      })
+
+      $scope.events = responseData;
+  });
+
+}]);
+
+myApp.controller('usfController',['$scope','$http',function($scope, $http) {
+  var config = {
+      params: {
+          school_id: "2",
+          u_id: getCookie("u_id"),
+          user_id:getCookie("user_id")
+      }
+  }
+
+  $http.get("http://teamflightclubproject.com/php/viewEventsByUniv.php",config)
+  .then(function (response) {
+      console.log("Connected");
+      var responseData = response.data;
+
+      responseData.map(function(index){
+          date = new Date(index.Start_date);
+          index.Start_date = date;
+      })
+
+      $scope.events = responseData;
+  });
+
+}]);
+
+myApp.controller('unfController',['$scope','$http',function($scope, $http) {
+  var config = {
+      params: {
+          school_id: "3",
+          u_id: getCookie("u_id"),
+          user_id:getCookie("user_id")
+      }
+  }
+
+  $http.get("http://teamflightclubproject.com/php/viewEventsByUniv.php",config)
+  .then(function (response) {
+      console.log("Connected");
+      var responseData = response.data;
+
+      responseData.map(function(index){
+          date = new Date(index.Start_date);
+          index.Start_date = date;
+      })
+
+      $scope.events = responseData;
+  });
+
+}]);
+
+myApp.controller('ufController',['$scope','$http',function($scope, $http) {
+  var config = {
+      params: {
+          school_id: "4",
+          u_id: getCookie("u_id"),
+          user_id:getCookie("user_id")
+      }
+  }
+
+  $http.get("http://teamflightclubproject.com/php/viewEventsByUniv.php",config)
+  .then(function (response) {
+      console.log("Connected");
+      var responseData = response.data;
+
+      responseData.map(function(index){
+          date = new Date(index.Start_date);
+          index.Start_date = date;
+      })
+
+      $scope.events = responseData;
+  });
+
+}]);
+
+myApp.controller('rsosController',['$scope','$http',function($scope, $http) {
+  var config = {
+      params: {
+          user_id:getCookie("user_id")
+      }
+  }
+
+  $http.get("http://teamflightclubproject.com/php/viewRSOEvent.php",config)
+  .then(function (response) {
+      console.log("Connected");
+      var responseData = response.data;
+
+      // responseData.map(function(index){
+      //     date = new Date(index.Start_date);
+      //     index.Start_date = date;
+      // })
+
+      $scope.events = responseData;
+  });
+
+}]);
+
+myApp.controller('eventController',['$routeParams','$scope','$http',function($routeParams,$scope, $http) {
+  var config = {
+      params: {
+          event_id: $routeParams.event_id
+      }
+  }
+
+  var placeSearch, autocomplete;
+
+  $scope.initMap = function(latitude,longitude) {
+      var uluru = {lat: parseFloat(latitude), lng: parseFloat(longitude)};
+      var directionsDisplay = new google.maps.DirectionsRenderer;
+      var directionsService = new google.maps.DirectionsService;
+      var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 17,
+        center: uluru
+      });
+      var marker = new google.maps.Marker({
+        position: uluru,
+        map: map
+      });
+      directionsDisplay.setMap(map);
+      autocomplete = new google.maps.places.Autocomplete(
+          /** @type {!HTMLInputElement} */(document.getElementById('start')),
+          {types: ['geocode']});
+      autocomplete.addListener('place_changed',function(){
+
+        console.log("Directions called from "+document.getElementById('start').value+" to "+document.getElementById('end').value);
+        var start = document.getElementById('start').value;
+        var end = document.getElementById('end').value;
+        var matchesCount = start.split(",").length - 1;
+        if (matchesCount > 1) {
+          directionsService.route({
+          origin: start,
+          destination: uluru,
+          travelMode: 'DRIVING'
+        }, function(response, status) {
+          if (status === 'OK') {
+            directionsDisplay.setDirections(response);
+          } else {
+            window.alert('Directions request failed due to ' + status);
+          }
+        });
+        }
+
+      });
+      directionsDisplay.setPanel(document.getElementById('right-panel'));
+      var control = document.getElementById('floating-panel');
+      control.style.display = 'block';
+      map.controls[google.maps.ControlPosition.TOP_CENTER].push(control);
+
+      // var onChangeHandler = function() {
+      //   $scope.calculateAndDisplayRoute(uluru,directionsService, directionsDisplay);
+      // };
+      // document.getElementById('start').addEventListener('change', onChangeHandler);
+      // document.getElementById('end').addEventListener('change', onChangeHandler);
+    }
+
+
+  $scope.modifyComment = function(user_id,text,rating) {
+    if(user_id == getCookie("user_id")) {
+      $("#modifycommenttxt").val(text);
+      $("modifycommentrating").val(rating);
+      document.getElementById('modifycommentform').style.display='block';
+    }
+    else {
+      alert("You can only modify comments that you created.");
+    }
+  };
+
+  $scope.deleteComment = function(user_id) {
+    if(user_id == getCookie("user_id")) {
+      deleteCommentFunc();
+    }
+    else {
+      alert("You can only delete comments that you created.");
+    }
+  };
+
+  $http.get("http://teamflightclubproject.com/php/viewEvent.php",config)
+  .then(function (response) {
+      console.log("Connected");
+      var responseData = response.data;
+
+      // responseData.map(function(index){
+      //     date = new Date(index.Start_date);
+      //     index.Start_date = date;
+      // })
+
+      $scope.event = responseData;
+      console.log(responseData);
+      $scope.initMap($scope.event.Latitude,$scope.event.Longitude);
+  });
+
+  $http.get("http://teamflightclubproject.com/php/viewComments.php",config)
+  .then(function (response) {
+      console.log("Connected");
+      var responseData = response.data;
+
+      // responseData.map(function(index){
+      //     date = new Date(index.Start_date);
+      //     index.Start_date = date;
+      // })
+
+      $scope.comments = responseData;
+      console.log(responseData);
+  });
+
+}]);
+  </script>
+<script
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAz374eeMSQgZwoBVFSlQ3ysrkdqHt55jA">
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAz374eeMSQgZwoBVFSlQ3ysrkdqHt55jA&libraries=places" async defer></script>
